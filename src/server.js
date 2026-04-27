@@ -4,6 +4,10 @@ const tasksRouter = require('./routes/tasks');
 const app = express();
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to Task Tracker API' });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
