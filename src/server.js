@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Task Tracker API' });
+  res.json({ message: 'Welcome Back! Updated with Github Action and Claude Code' });
 });
 
 app.get('/health', (req, res) => {
