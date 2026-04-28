@@ -14,7 +14,9 @@ The server listens on port `3000` by default.
 ## API
 
 ### `GET /health`
-Returns `{ "status": "ok" }`.
+Returns `{ "status": "ok", "uptime": "2h 15m" }`. The `uptime` field is a
+human-readable duration since the process started (e.g. `"30s"`, `"5m 12s"`,
+`"1d 3h 5m"`).
 
 ### `GET /tasks`
 Returns all tasks.

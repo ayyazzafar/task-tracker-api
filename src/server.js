@@ -67,8 +67,23 @@ app.get('/', (req, res) => {
 </html>`);
 });
 
+function formatUptime(seconds) {
+  const total = Math.max(0, Math.floor(seconds));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const parts = [];
+  if (d) parts.push(`${d}d`);
+  if (h || parts.length) parts.push(`${h}h`);
+  if (m || parts.length) parts.push(`${m}m`);
+  parts.push(`${s}s`);
+  if (parts.length > 1 && parts[parts.length - 1] === '0s') parts.pop();
+  return parts.join(' ');
+}
+
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+  res.json({ status: 'ok', uptime: formatUptime(process.uptime()) });
 });
 
 app.use('/tasks', tasksRouter);
