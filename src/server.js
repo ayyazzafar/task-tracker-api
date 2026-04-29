@@ -1,4 +1,5 @@
 const { execSync } = require('child_process');
+const { randomUUID } = require('crypto');
 const express = require('express');
 const tasksRouter = require('./routes/tasks');
 const { version } = require('../package.json');
@@ -64,6 +65,7 @@ app.get('/', (req, res) => {
     <tbody>
       <tr><td><span class="method">GET</span></td><td><code>/health</code></td><td>Health check</td></tr>
       <tr><td><span class="method">GET</span></td><td><code>/version</code></td><td>Version, commit, and uptime</td></tr>
+      <tr><td><span class="method">GET</span></td><td><code>/random</code></td><td>Returns random values</td></tr>
       <tr><td><span class="method">GET</span></td><td><code>/tasks</code></td><td>List all tasks</td></tr>
       <tr><td><span class="method">GET</span></td><td><code>/tasks/:id</code></td><td>Get a task</td></tr>
       <tr><td><span class="method">POST</span></td><td><code>/tasks</code></td><td>Create a task</td></tr>
@@ -83,6 +85,14 @@ app.get('/health', (req, res) => {
 
 app.get('/version', (req, res) => {
   res.json({ version, commit, uptime: process.uptime() });
+});
+
+app.get('/random', (req, res) => {
+  res.json({
+    uuid: randomUUID(),
+    number: Math.floor(Math.random() * 1_000_000),
+    dice: Math.floor(Math.random() * 6) + 1,
+  });
 });
 
 app.use('/tasks', tasksRouter);
