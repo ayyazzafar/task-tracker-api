@@ -1,5 +1,14 @@
+const { execSync } = require('child_process');
 const express = require('express');
 const tasksRouter = require('./routes/tasks');
+const { version } = require('../package.json');
+
+let commit = 'unknown';
+try {
+  commit = execSync('git rev-parse HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+    .toString()
+    .trim();
+} catch {}
 
 const app = express();
 app.use(express.json());
@@ -54,6 +63,7 @@ app.get('/', (req, res) => {
     <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
     <tbody>
       <tr><td><span class="method">GET</span></td><td><code>/health</code></td><td>Health check</td></tr>
+      <tr><td><span class="method">GET</span></td><td><code>/version</code></td><td>Version, commit, and uptime</td></tr>
       <tr><td><span class="method">GET</span></td><td><code>/tasks</code></td><td>List all tasks</td></tr>
       <tr><td><span class="method">GET</span></td><td><code>/tasks/:id</code></td><td>Get a task</td></tr>
       <tr><td><span class="method">POST</span></td><td><code>/tasks</code></td><td>Create a task</td></tr>
@@ -71,11 +81,17 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.get('/version', (req, res) => {
+  res.json({ version, commit, uptime: process.uptime() });
+});
+
 app.use('/tasks', tasksRouter);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`task-tracker-api listening on port ${PORT}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`task-tracker-api listening on port ${PORT}`);
+  });
+}
 
 module.exports = app;

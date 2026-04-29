@@ -16,6 +16,9 @@ The server listens on port `3000` by default.
 ### `GET /health`
 Returns `{ "status": "ok" }`.
 
+### `GET /version`
+Returns `{ version, commit, uptime }` (uptime in seconds).
+
 ### `GET /tasks`
 Returns all tasks.
 
